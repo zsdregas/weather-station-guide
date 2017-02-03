@@ -1,17 +1,17 @@
-# Raspberry Pi weather station
+# Μετεωρολογικός Σταθμός με το Raspberry Pi
 
 ![](weather.png)
 
-The Weather Station kit is a HAT for the Raspberry Pi which allows it to collect weather data using a variety of sensors. It is designed to be used in schools to enable students to create their own weather station, and has a range of resources to support its use.
+Το πακέτο του μετεορολογικού σταθμού είναι ενα HAT για το Raspberry Pi το οποίο του επιτρέπει να συλλέξει δεδομένα καιρού χρησιμοποιόντας μια ποικιλία αισθητήρων. Είναι φτιαχμένο για να χρησιμοποιείται στα σχολεία ώστε να κάνει τους μαθητές να φτιάξουν το δικό τους μετεωρολογικό σταθμό, και έχει ποικιλία πηγών για να ενθαρύνει την χρήση του.
 
-As well as logging data locally, schools that received a free Weather Station can log their data in a central Oracle database, so they can share information and collaborate with schools around the world.
+Τα σχολεία που δέχτηκαν ένα δωρεάν μετεορολογικό σταθμό μπορούν να αποθηκεύσουν τα δεδομένα τους τοπικά σε μια δικιά τους βάση δεδομένων. Επίσης αποθικεύοθν τα δεδομένα τους σε μία κεντρική βάση δεδομένων Oracle. Έτσι μπορούν να μιράσουν τις πληροφορίες τους και να συνεργάζοντε με αλλα σχολεία από όλο τον κόσμο.
+ 
 
+![Μετεορολογικός σταθμός](images/weather-station-kit.png)
 
-![Weather Station](images/weather-station-kit.png)
+##Πως να εγγαταστίσεις το δικό σου μετεορολογικό σταθμό 
 
-## How to set up your Weather Station
-
-1. [Registering your Weather Station](register.md)
+1. [Καταχόριση του μετεορολογικού σου βαθμού](register.md)
 1. [Building your Weather Station Part I](build.md)
 1. [Set up the software](software.md)
 1. [Building your Weather Station Part II](build2.md)
