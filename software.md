@@ -1,13 +1,14 @@
-# Weather Station Software Setup
+# Ρύθμιση Λογισμικού Μετεωρολογικού Σταθμού
 
-There are a few steps involved in setting up the software for the Weather Station. Before beginning this section, please ensure that you have [registered your School and Weather Station on the Oracle Database](register.md).
+Για να ρυθμίσουμε το λογισμικό του σταθμού πρέπει να ακολουθήσουμε μια σειρά από βήματα. Πριν ξεκινήσουμε, όμως, καλό είναι να έχουμε καταχωρήσει το σχολείο και το σταθμό μας στη [βάση δεδομένων της Oracle](register.md).
 
-## Getting the latest Raspberry Pi OS
-1. The SD card that comes with the Weather Station kit contains a now-out-of-date version of Raspbian, the Raspberry Pi operating system.
-1. Follow the [guide on the Raspberry Pi website](https://www.raspberrypi.org/learning/software-guide/) which tells you how to install the latest version of Raspbian.
+## Λήψη του πιο ενημερωμένου λειτουργικού για το Raspberry Pi 
+1. Η κάρτα SD που έρχεται με το Μετεωρολογικό Σταθμό περιέχει μια παλιά έκδοση του Raspbian, του λειτουργικού συστήματος του Raspberry Pi.
+1. Ακολουθείστε τον [οδηγό στον ιστότοπο του Raspberry Pi](https://www.raspberrypi.org/learning/software-guide/) για να δείτε πως να το εγκαταστήσετε.
 
-## Setting up the Sensing and Database software.
+## Εγκατάσταση του λογισμικού για τους Αισθητήρες και τη βάση δεδομένων.
 
+1. Ο απλούστερος τρόπος για να ρυθμίσουμε το λογισμικό είναι να χρησιμοποιήσουμε ένα απλό σενάριο εγκατάστασης.
 1. The simplest way to set the software up is to use a simple install script. If you wish to proceed manually through the steps, then you can follow [this guide](manual-setup.md), but this is only recommended if you have a firm understanding of command line interface, enjoy unnecessary labour, or want to make custom adjustments to your setup.
 
 1. When Raspbian boots up, press **Ctrl** and **Alt** and the character **t** on your keyboard. This will open up a terminal prompt.
