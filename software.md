@@ -6,46 +6,45 @@
 1. Η κάρτα SD που έρχεται με το Μετεωρολογικό Σταθμό περιέχει μια παλιά έκδοση του Raspbian, του λειτουργικού συστήματος του Raspberry Pi.
 1. Ακολουθείστε τον [οδηγό στον ιστότοπο του Raspberry Pi](https://www.raspberrypi.org/learning/software-guide/) για να δείτε πως να το εγκαταστήσετε.
 
-## Εγκατάσταση του λογισμικού για τους Αισθητήρες και τη βάση δεδομένων.
+## Εγκατάσταση του λογισμικού για τους Αισθητήρες και τη Βάση Δεδομένων.
 
-1. Ο απλούστερος τρόπος για να ρυθμίσουμε το λογισμικό είναι να χρησιμοποιήσουμε ένα απλό σενάριο εγκατάστασης.
-1. The simplest way to set the software up is to use a simple install script. If you wish to proceed manually through the steps, then you can follow [this guide](manual-setup.md), but this is only recommended if you have a firm understanding of command line interface, enjoy unnecessary labour, or want to make custom adjustments to your setup.
+1. Ο απλούστερος τρόπος για να ρυθμίσουμε το λογισμικό είναι να χρησιμοποιήσουμε ένα απλό σενάριο εγκατάστασης. Αν θέλετε να συνεχίσετε με χειροκίνητη εγκατάσταση ακολουθείστε [αυτόν τον οδηγό](manual-setup.md).
+Σας το προτείνουμε μόνο αν νιώθετε σιγουριά με το τερματικό του Linux, ή θέλετε να κάνετε τροποποιήσεις στις ρυθμίσεις εγκατάστασης.
 
-1. When Raspbian boots up, press **Ctrl** and **Alt** and the character **t** on your keyboard. This will open up a terminal prompt.
+1. Όταν εκκινήσει το Raspbian, πατείστε **Ctrl** και **Alt** και το γράμμα **t** στο πληκτρολόγιο. Θα εμφανιστεί ένα τερματικό.
 
-1. It's always best to ensure the software you are running is the latest version. Ensure that your Raspberry Pi is connected to the internet and then type the following into the terminal window.
+1. Είναι καλό το λογισμικό σας να είναι πάντα η τελευταία έκδοση. Αφού σιγουρευτείτε ότι το Raspberry Pi είναι συνδεμένο στο Διαδίκτυο, πληκτρολογείστε ή αντιγράψτε τις ακόλουθες εντολές στο τερματικό.
 
    ```bash
    sudo apt-get update && sudo apt-get upgrade -y
    ```
-   
-  **Note that sometimes during the `update` and `upgrade` process you maybe prompted as to whether you would like certain pieces of software to be installed or certain settings to be changed.**
+   Η αναβάθμιση μπορεί να πάρει αρκετή ώρα, οπότε κάντε υπομονή.
+
+  **Κατά τη διάρκεια της ενημέρωσης και της αναβάθμισης του συστήματος μπορεί να ερωτηθείτε για το αν θέλετε να εγκατασταθεί νέο λογισμικό ή να αλλάξουν κάποιες ρυθμίσεις. Τουλάχιστον κατά την πρώτη αυτή φορά θα πρέπει να συναινέσετε στις προσθήκες ή αλλαγές αυτές.**
   
-1. Once Raspbian has been updated, it's time to install the Weather Station software. Type (or copy and paste) the following line into the terminal window.
+1. Αφού ενημερωθεί το Raspbian, είναι ώρα να εγκαταστήσουμε το λογισμικό για το Μετεωρολογικό Σταθμό. Πληκτρολογείστε ή, ακόμα καλύτερα, κάντε εντιγραφή και επικόλληση την επόμενη γραμμή στο τερματικό.
 
 	```bash
 	bash <(wget -O- https://gist.githubusercontent.com/MarcScott/a843c4dd4dfa3934b3de7b1fc0beadf8/raw/e65fd1c178202cf4ad8d4361ed5dcc1eeb2bb8d5/weather_install.sh)
 	```
 
-1. You can now proceed through the installation process:
-    - When prompted, press any key to continue.
+1. Μπορείτε τώρα να συνεχίσετε με την εγκατάσταση:
+    - Όταν σας ζητηθεί, πατήστε ένα πλήκτρο για να συνεχίσετε.
 	![](images/install_01.png)
 	
-    - When prompted, type **y** if the time displayed is correct.
+    - Όταν σας ζητηθεί, πατήστε το **y** αν η ώρα είναι σωστή.
 	![](images/install_02.png)
 	
-	- If the time is incorrect, type **n** and then enter the correct time in the format `yyyy-mm-dd hh:mm:ss`.
+	- Αν η ώρα δεν είναι σωστή, type **n** και εισάγετε τη σωστή ώρα στη μορφή `εεεε-μμ-ηη ωω:λλ:δδ`.
 	![](images/install_03.png)
 	
-	- Next you will need to choose a database password. It can be anything you like, as it is the password for the local database on your Raspberry Pi. Write the password down somewhere so you do not forget it.
+	- Θα χρειαστεί μετά να διαλέξετε έναν κωδικό πρόσβασης για τη βάση δεδομένων. Είναι ο κωδικός για την τοπική βασή δεδομένων στο Raspberry Pi. Μπορεί να είναι ότι θέλετε, αλλά καλό θα είναι να είναι με λατινικούς χαρακτήρες και όχι πολύ εύκολος. Γράψτε αν θέλετε τον κωδικό κάπου για να μην τον ξεχάσετε.
 	![](images/install_04.png)
 	
-	- Next you need to type in the Weather Station name and password/key that you learned when you registered your Weather Station.
+	- Μετά πρέπει να πληκτρολογήσετε το όνομα του Μετεωρολογικού Σταθμού καθώς τον κωδικό που πήρατε όταν τον καταχωρήσατε στη Βάση Δεδομένων της Oracle. Μπορείτε μετά να συνεχίσετε με τη ρύθμιση του υπόλοιπου υλικού.
 	![](images/install_05.png)
-	
-1. Once the install has finished, your Raspberry Pi should reboot. You can now proceed to setting up the rest of the hardware.
 
-## What Next?
+## Τι κάνω μετά;
 
-You can now proceed to finishing the hardware setup with our [Hardware Guide](build2.md), or move on to testing the sensors with our [Testing Guide](test.md) if you've already finished the assembly.
+Μπορείτε τώρα να συνεχίσετε τη ρύθμιση του υλικού με τον [Οδηγό Υλικού](build2.md), ή να ελέγξετε τους αισθητήρες με τον [Οδηγό ελέγχου](test.md) αν έχετε ολοκληρώσει τη συναρμολόγηση.
 

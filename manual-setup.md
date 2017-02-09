@@ -1,82 +1,82 @@
-# Setting up the Raspberry Pi Oracle weather station software manually.
+# Χειροκίνητη ρύθμιση του λογισμικού του Μετεωρολογικού Σταθμού.
 
-You don't need any prior knowledge to set up the weather station. There are several steps, but the benefit of setting up manually is that you'll learn about the workings of the sensors and the station as you do it. You'll also be introduced to the command line interface, the text editor nano and the MySQL database. It's also a great introduction to Linux.
+Για να ρυθμίσετε το μετεωρολογικό σταθμό δε χρειάζεται προηγούμενη εμπειρία. Χρειάζεται να γίνουν αρκετά βήματα, αλλά τελειώνοντάς τα θα έχετε μάθει αρκετά πράγματα για τους αισθητήρες και το σταθμό. Θα έχετε αποκτήσει μια πρώτη επαφή με τη γραμμή εντολών, το διορθωτή κειμένου nano και τη βάση δεδομένων MySQL. Είναι επίσης μια πολύ καλή εισαγωγή στο Linux.
 
 
-## Manual installation
+## Χειροκίνητη Εγκατάσταση
 
-1.  Start with a fresh install of the latest version of [Raspbian](https://www.raspberrypi.org/downloads/raspbian/).
-1.  When booting for the first time, you will be presented with the desktop.
+1. Ξεκινείστε με μια φρέσκια εγκατάσταση της τελευταίας έκδοσης του [Raspbian](https://www.raspberrypi.org/downloads/raspbian/).
+1. Όταν εκκινήσει για πρώτη φορά το Raspberry Pi, θα δείτε την επιφάνεια εργασίας του στα αγγλικά.
 
-1.  From the Menu button on the top-left, choose `Preferences` > `Raspberry Pi Configuration`.
+1. Από το Μενού πάνω αριστερά, επιλέξτε `Preferences` > `Raspberry Pi Configuration`.
     
-1. We recommend that you **change your password** using the button underneath.
+1. Σας προτείνουμε να **αλλάξετε τον κωδικό** από το κουμπί που είναι από κάτω.
 
-1. In the Interfaces tab, enable I2C:
+1. Στην καρτέλα Interfaces, ενεργοποιήστε το I2C:
 
     ![](images/i2c.png)
     
-1. A reboot dialogue will appear. Select "Yes". 
+1. Θα σας ζητηθεί να κάνετε επανεκκίνηση. Επιλέξτε "Yes". 
 
-## Setting up the real-time clock
+## Ρύθμιση του ρολογιού (RTC)
 
-We'll be doing most of the work from the command line. Open a terminal window, using the icon on the menu bar or pressing `ctrl`+`alt`+`t`.
+Θα κάνουμε την περισσότερη δουλειά από γραμμή εντολών. Ανοίξτε ένα τερματικό, χρησιμοποιώντας το εικονίδιο από τα πάνω εικονίδι ή πατώντας `ctrl`+`alt`+`t`.
 
    ![](images/terminal.png) 
 
-You'll now be at a prompt:
+θα δείτε το παρακάτω:
 
 ```bash
 pi@raspberrypi: ~ $
 ```
 
-You can type the commands which follow into this prompt.
+Μπορείτε τώρα να πληκτρολογήσετε τις παρακάτω εντολές.
 
-First, you'll need to download the necessary files: 
+Πρέπει, όμως, πρώτα να κατεβάσετε τα απαραίτητα αρχεία: 
 
 ```bash
 cd ~ && git clone https://github.com/raspberrypi/weather-station
 ```
 
-We've included an install script to set up the real-time clock automatically. You can run this file or, alternatively, follow the instructions below to set up the RTC manually. We recommend using the install script!
+Έχουμε συμπεριλάβει ένα σενάριο εγκατάστασης για να ρυθμιστεί αυτόματα το ρολόι πραγματικού χρόνου. Μπορείτε να το εκτελέσετε ή να ακολουθήσετε τις οδηγίες που ακολουθούν για να ρυθμίσετε το ρολόι με το χέρι. Σας προτείνουμε το αρχείο εγκατάστασης!
 
-## RTC setup
+## Εγκατάσταση ρολογιού
 
-First, you want to make sure you have all the latest updates for your Raspberry Pi:
+Βεβαιωθείτε πρώτα ότι έχετε τις τελευταίες ενημερώσεις για το Raspberry Pi με τις παρακάτω εντολές:
 
 ```bash
 sudo apt-get update && sudo apt-get upgrade
 ```
 
-You now need to make some changes to a config file to allow the Raspberry Pi to use the real-time clock:
+Θα πρέπει να κάνετε κάποιες αλλαγές σε ένα αρχείο ρυθμίσεωνγια να επιτρέψετε στο Raspberry Pi να χρησιμοποιήσει το ρολόι:
 
 ```bash
 sudo nano /boot/config.txt
 ```
 
-Add the following lines to the bottom of the file:
+Προσθέστε τις παρακάτω γραμμές στο τέλος του αρχείου:
 
 ```bash
 dtoverlay=w1-gpio
 dtoverlay=pcf8523-rtc
 ```
 
-Press **Ctrl + O** then **Enter** to save, and **Ctrl + X** to quit nano.
+Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από nano.
 
-Now set the required modules to load automatically on boot:
+Τώρα ρυθμίστε τις απαραίτητες μονάδες να ξεκινούν αυτόματα κατά την εκκίνηση:
 
 ```bash
 sudo nano /etc/modules
 ```
 
-Add the following lines to the bottom of the file:
+Προσθέστε τις παρακάτω γραμμές στο τέλος του αρχείου:
 
 ```bash
 i2c-dev
 w1-therm
 ```
 
-Press **Ctrl + O** then **Enter** to save, and **Ctrl + X** to quit nano.
+Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από nano.
 
 For the next steps, we need the Weather Station HAT to be connected to the Raspberry Pi:
 
@@ -203,54 +203,54 @@ Note: `40`, `77` and `6a` will only show if you have connected the **AIR** board
 
 Now that the sensors are working, we need a database to store the data from them.
 
-## Database setup
+## Ρύθμιση Βάσης Δεδομένων
 
-Now you'll set up your weather station to automatically log the collected weather data. The data is stored on the Pi's SD card using a database system called MySQL. Once your station is successfully logging data locally, you'll also be able to [upload that data](oracle.md) to a central Oracle Apex database to share it with others. 
+Θα ρυθμίσετε τώρα το σταθμό να αποθηκεύει αυτόματα τα δεδομένα που συνέλλεξε. Τα δεδομένα αποθηκεύονται στην κάρτα SD του Raspberry Pi σε μια βάση δεδομένων που λέγετε MySQL. Μόλις ο σταθμός αποθηκεύσει τα δεδομένα τοπικά, θα μπορείτε επίσης να τα [μεταφορτώσετε](oracle.md) σε μια κεντρική βάση δεδομένωn της Oracle Apex για να τα μοιράζεστε και με άλλους. 
 
-### Install the necessary software packages
+### Εγκατάσταση απαραίτητων πακέτων λογισμικού
 
-At the command line, type the following:
+Στη γραμμή εντολών πληκτρολογείστε:
 
 ```bash
 sudo apt-get update
 sudo apt-get install apache2 mysql-server python-mysqldb php5 libapache2-mod-php5 php5-mysql -y
 ```
   
-If you make a mistake, use the cursor UP arrow to go back to previous lines for editing.
+Αν κάνετε κάποιο λάθος, πατήστε το πάνω βελάκι για να επεξεργαστείτε μια προηγούμενη εντολή.
 
-Please note that this will take some time. You will be prompted to create and confirm a password for the root user of the MySQL database server. Don't forget it, as you'll need it later.
+Κατά τη διάρκεια της εγκατάστασης θα σας ζητηθεί να δημιουργήσετε και να επαληθεύσετε έναν κωδικό για το διαχειριστή του εξυπηρετητή βάσης δεδομένων MySQL. Μην τον ξεχάσετε, θα τον χρειαστείτε αργότερα.
 
-### Create a local database within MySQL
+### Δημιουργία τοπικής βάσης δεδομένων
 
-Enter the following:
+Γράψτε την ακόλουθη εντολή:
 
 ```bash
 mysql -u root -p
 ```
 
-Enter the password that you chose during installation.
+Βάλτε τον κωδικό που ορίσατε κατά τη διάρκεια της εγκατάστασης του εξυπηρετητή MySql παραπάνω.
 
-You'll now be at the MySQL prompt `mysql>`. First, create the database:
+Θα δείτε το `mysql>` είστε έτοιμοι να δημιουργήσετε τη βάση δεδομένων:
 
 ```mysql
 CREATE DATABASE weather;
 ```
 
-You should now see `Query OK, 1 row affected (0.00 sec)`.
+Πρέπει να δείτε `Query OK, 1 row affected (0.00 sec)`.
 
-Switch to that database:
+Ας αλλάξουμε στη βάση αυτή:
 
 ```mysql
 USE weather;
 ```
 
-You should see `Database changed`.
+Πρέπει να δείτε `Database changed`.
 
-If MySQL doesn't do anything when it should, you've probably forgotten the final `;`. Just type it in when prompted and press **Enter**.
+Αν η MySQL δεν κάνει αυτό που πρέπει ή εμφανίζει λάθη, το πιθανότερο είναι να έχετε ξεχάσει το τελικόy `;`. Απλά πληκτρολογήστε το και πατήστε **Enter**.
   
-### Create a table to store the weather data
+### Δημιουργία πίνακα στη βάση
 
-Type the code below, taking note of the following tips: 
+Ο πρωτότυπος οδηγός προτείνει να πληκτρολογήσετε τον παρακάτω κώδικα, δίνοντας και τις ακόλουθες συμβουλές: 
 
 - Don't forget the commas at the end of the row.
 - Use the cursor UP arrow to copy and edit a previous line, as many are similar.
@@ -274,10 +274,26 @@ Type the code below, taking note of the following tips:
     PRIMARY KEY ( ID )
   );
 ```
-  
+
 You should now see `Query OK, 0 rows affected (0.05 sec)`.
-  
-Press `Ctrl - D` or type `exit` to quit MySQL.
+
+Ας το κάνετε λίγο διαφορετικά να γλυτώσετε γράψιμο και λάθη. Επιλέξτε και αντιγράψτε τις παραπάνω εντολές, από το 'CREATE έως το ); . 
+Πατήστε  `Ctrl - D` ή πληκτρολογήστε `exit` και **ENTER** για να βγείτε από τη MySQL.
+
+Από γραμμή εντολών γράψτε:
+```
+nano myscript.sql
+```
+Στο παράθυρο που θα εμφανιστεί Πατήστε δεξί κλικ και paste. Πρέπει να δείτε κάτι σαν την παρακάτω εικόνα:
+![](images/Terminal_063.png) 
+
+Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από nano.
+
+Γράψτε:
+```
+mysql -u root -p -h localhost weather < myscript.sql
+```
+Ο πίνακας δημιουργήθηκε στη βάση μας και είναι έτοιμος να δεχτεί τα δεδομένα μας.
 
 ## Set up the sensor software
 
