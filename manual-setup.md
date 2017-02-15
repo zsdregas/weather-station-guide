@@ -2,6 +2,9 @@
 
 Για να ρυθμίσετε το μετεωρολογικό σταθμό δε χρειάζεται προηγούμενη εμπειρία. Χρειάζεται να γίνουν αρκετά βήματα, αλλά τελειώνοντάς τα θα έχετε μάθει αρκετά πράγματα για τους αισθητήρες και το σταθμό. Θα έχετε αποκτήσει μια πρώτη επαφή με τη γραμμή εντολών, το διορθωτή κειμένου nano και τη βάση δεδομένων MySQL. Είναι επίσης μια πολύ καλή εισαγωγή στο Linux.
 
+Αν διαβάσετε τον αρχικό αγγλικό οδηγό θα δείτε ότι προτείνει να συναρμολογήσετε πρώτα το σταθμό και το Raspberry και μετά να ρυμίσετε το λογισμικό.
+Σας προτείνω να μην το κάνετε με αυτή τη σειρά, αλλά να ρυθμίστε πρώτα το λογισμικό.
+
 
 ## Χειροκίνητη Εγκατάσταση
 
@@ -275,7 +278,7 @@ USE weather;
   );
 ```
 
-You should now see `Query OK, 0 rows affected (0.05 sec)`.
+Θα δείτε κάτι σαν `Query OK, 0 rows affected (0.05 sec)`.
 
 Ας το κάνετε λίγο διαφορετικά να γλυτώσετε γράψιμο και λάθη. Επιλέξτε και αντιγράψτε τις παραπάνω εντολές, από το 'CREATE έως το ); . 
 Πατήστε  `Ctrl - D` ή πληκτρολογήστε `exit` και **ENTER** για να βγείτε από τη MySQL.
@@ -295,34 +298,39 @@ mysql -u root -p -h localhost weather < myscript.sql
 ```
 Ο πίνακας δημιουργήθηκε στη βάση μας και είναι έτοιμος να δεχτεί τα δεδομένα μας.
 
-## Set up the sensor software
+## Εγκατάσταση το λογισμικού για τους αισθητήρες
 
-Begin by downloading the data logging code. You can skip this step if you have set up the [real-time clock](software-setup.md).
+Ξεκινήστε κατεβάζοντας τον κώδικα για την καταγραφή των δεδομένων. Μπορείτε να παραλείψετε αυτό το βήμα αν έχετε ήδη εγκαταστήσει το [ρολόι πραγματικού χρόνου](software-setup.md).
 
 ```
 cd ~
 git clone https://github.com/raspberrypi/weather-station.git
 ```
+Θα δημιουργηθεί ένας νέος φάκελος μέσα στον προσωπικό σας με όνομα `weather-station`.
 
-This will create a new folder in the home directory called `weather-station`.
+### Ξεκινήστε το δαίμονα του μετεωρολογικού σταθμού και δοκιμάστε τον
 
-### Start the weather station daemon and test it
+Σύμφωνα με την [Eισαγωγή στο Linux, Ένας πρακτικός οδηγός](http://www.it.uom.gr/teaching/linux/intro-linux-gr/intro-linux.html#sect_04_01), από το Πανεπιστήμιο Μακεδονίας:
+> Οι δαίμονες (daemons) είναι διεργασίες διακομιστή που εκτελούνται συνεχώς. Συνήθως αρχικοποιούνται με την έναρξη του συστήματος και μετά περιμένουν στο παρασκήνιο μέχρι να ζητηθεί η συνδρομή τους.
 
-A daemon is a process that runs in the background. To start the daemon we need for the weather station, use the following command:
+Για να ξεκινήσετε το δαίμονα για το μετεωρολογικό σταθμό, εκτελέστε την παρακάτω εντολή:
 
 ```bash
 sudo ~/weather-station/interrupt_daemon.py start
 ```
   
-You should see something like `PID: 2345` (your number will be different).
+Πρέπει να δείτε κάτι σαν `PID: 2345` (ο αριθμός θα είναι διαφορετικός).
   
-A continually running process is required to monitor the rain gauge and the anemometer. These are reed switch sensors and the code uses interrupt detection. These interrupts can occur at any time, as opposed to the timed measurements of the other sensors. You can use the **telnet** program to test or monitor it, with the following command:
+Για την παρακολούθηση του μετρητή βροχή και του ανεμόμετρου απαιτείται μια διαδικασία (πρόγραμμα) που εκτελείται συνέχεια. Οι αισθητήρες αυτοί είναι 
+μαγνητικοί αισθητήρες reed και ο κώδικας χρησιμοποιεί [διακοπές.](http://www.it.uom.gr/project/mycomputer/r_usage/i_intro.html) 
+Οι διακοπές αυτές μπορούν να συμβούν οποιαδήποτε στιγμή, σε αντίθεση με το τις μετρήσεις των άλλων αισθητήρων που γίνονται σε τακτικά χρονικά διαστήματα. 
+Μπορείτε να χρησιμοποιήσετε το πρόγραμμα **telnet** για να τα δοκιμάσετε ή να τα παρακολουθήσετε με την ακόλουθη εντολή:
   
 ```bash
 telnet localhost 49501
 ```
   
-You should see something like this:
+Θα πρέπει να δείτε κάτι σαν κι αυτό:
 
 ```
 Trying 127.0.0.1...
@@ -331,15 +339,19 @@ Escape character is '^]'.
 OK
 ```
 
-The following text commands can be used:
+Μπορείτε να χρησιμοποιήσετε τις ακόλουθες εντολές:
 
-- `RAIN`: displays rainfall in ml
-- `WIND`: displays average wind speed in kph
-- `GUST`: displays wind gust speed in kph
-- `RESET`: resets the rain gauge and anemometer interrupt counts to zero
-- `BYE`: quits
+- `RAIN`: εμφανίζει τον όγκο βροχής σε ml
+- `WIND`: εμφανίζει τη μέση ταχύτητα ανέμου σε χ/ω
+- `GUST`: εμφανίζει την ταχύτητα ριπών αέρα σε χ/ω
+- `RESET`: μηδενίζει τους μετρητές διακοπής του μετρητή βροχής και του ανεμόμετρου.
+- `BYE`: έξοδος
 
-Use the `BYE` command to quit.
+Με την εντολή `BYE` αποσυνδέεστε.
+![](images/telnet.png)
+Αν ο υπολογιστής σας δεν έχει εγκατεστημένο εφαρμογή telnet, όπως συνήθως συμβαίνει στα windows, Μπορείτε να χρησιμοποιήσετε το [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html?).
+Είναι ένα ελεύθερο λογισμικό που ενσωματώνει πελάτη telnet και, ίσως ακόμα πιο σημαντικό, πελάτη ssh. Με το putty μπορείτε να συνδεθείτε στο 
+raspberrypi απομακρυσμένα μέσω ssh και μετά με telnet, όπως περιγράφεται παραπάνω.
 
 ### Set the weather station daemon to automatically start at boot
 
