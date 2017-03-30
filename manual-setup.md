@@ -81,59 +81,58 @@ w1-therm
 
 Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από nano.
 
-For the next steps, we need the Weather Station HAT to be connected to the Raspberry Pi:
+Για τα επόμενα βήματα, η πρόσθετη πλακέτα θα πρέπει να είναι συνδεμένη με το Raspberry Pi:
 
 ```bash
 sudo halt
 ```
 
-Reboot for the changes to take effect:
+Κάντε επανεκίνηση για να εφαρμοστούν οι αλλαγές:
 
 ```bash
 sudo reboot
 ```
 
-Check that the real-time clock (RTC) appears in `/dev`:
+Ελέξτε ότι το ρολόι εμφανίζεται στο φάκελο με τις συσκευές `/dev`:
 
 ```bash
 ls /dev/rtc*
 ```
 
-You should see something like `/dev/rtc0`.
+Θα πρέπει να δείτε κάτι σαν `/dev/rtc0`.
 
-## Initialise the RTC with the correct time
+## Ρύθμιση του ρολογιού με τη σωστή ώρα
 
-Use the `date` command to check the current system time is correct. If it's correct, then you can set the RTC time from the system clock with the following command:
+Χρησιμοποιείστε την εντολή `date` για να ελέξετε ότι η ώρα του συστήματος είναι σωστή. Αν όντως είναι σωστή, μπορείτε να ρυθμίσετε του ρολόι πραγματικού χρόνου από το ρολόι του συστήματος με την ακόλουθη εντολή:
 
 ```bash
 sudo hwclock -w
 ```
-
-If not, then you can set the RTC time manually using the command below (you'll need to change the `--date` parameter, as this example will set the date to the 1st of January 2014 at midnight):
+Αν δεν είναι σωστή, τότε ρυθμίστε την ώρα του ρολογιού πραγματικού χρόνου με την παρακάτω εντολή. Θα χρειαστεί να αλλάξετε την παράμετρο `--date`, δίνοντάς της ως τιμή την ημερομηνία και ώρα που έχετε εσείς την ώρα που εκτελείται την εντολή.
+Αν δεν το κάνετε, ημερομηνία θα οριστεί στα μεσάνυχτα της 1ης Ιανουαρίου 2014.
 
 ```bash
 sudo hwclock --set --date="yyyy-mm-dd hh:mm:ss" --utc
 ```
 
-For example:
+Για παράδειγμα:
 
 ```bash
-sudo hwclock --set --date="2015-08-24 18:32:00" --utc
+sudo hwclock --set --date="2017-02-18 18:32:00" --utc
 ```
 
-Then set the system clock from the RTC time:
+Ορίστε μετά την ώρα του συστήματος από την ρολόι πραγματικού χρεόνου:
 
 ```bash
 sudo hwclock -s
 ```
-
+Τώρα πρέπει μα ενεργοποιήσετε τη ρύθμιση του ρολογιού του συστήματος αυτόματα κατά την εκκίνηση. Επεξεργαστείτε πρώτα τον κανόνα στο αρχείο `/lib/udev/`:
 Now you need to enable setting the system clock automatically at boot time. First, edit the rule in `/lib/udev/`:
 
 ```bash
 sudo nano /lib/udev/hwclock-set
 ```
-
-Find the lines at the bottom that read:
+Βρείτε τις γραμμές προς το τέλος που είναι:
 
 ```bash
 if [ yes = "$BADYEAR" ] ; then
@@ -143,7 +142,7 @@ else
 fi
 ```
 
-Change the `--systz` options to `--hctosys` so that they read:
+Αλλάξτε τις επιλογές `--systz` σε `--hctosys` έτσι ώστε να γράφει:
 
 ```bash
 if [ yes = "$BADYEAR" ] ; then
@@ -153,7 +152,7 @@ else
 fi
 ```
 
-Press **Ctrl + O** then **Enter** to save, and **Ctrl + X** to quit nano.
+Πατήστε **Ctrl + O** και **Enter** για να αποθηκεύσετε, και **Ctrl + X** για να κλείσετε το nano.
 
 ## Remove the fake hardware clock package
 
