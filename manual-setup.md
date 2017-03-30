@@ -121,13 +121,13 @@ sudo hwclock --set --date="yyyy-mm-dd hh:mm:ss" --utc
 sudo hwclock --set --date="2017-02-18 18:32:00" --utc
 ```
 
-Ορίστε μετά την ώρα του συστήματος από την ρολόι πραγματικού χρεόνου:
+Ορίστε μετά την ώρα του συστήματος από την ρολόι πραγματικού χρόνου:
 
 ```bash
 sudo hwclock -s
 ```
 Τώρα πρέπει μα ενεργοποιήσετε τη ρύθμιση του ρολογιού του συστήματος αυτόματα κατά την εκκίνηση. Επεξεργαστείτε πρώτα τον κανόνα στο αρχείο `/lib/udev/`:
-Now you need to enable setting the system clock automatically at boot time. First, edit the rule in `/lib/udev/`:
+Πρέπει να ενεργοποιήσετε την αυτόματη ρύθμιση του ρολογιού πραγματικού χρόνου κατά την εκκίνηση του υπολογιστή. Για αρχή, επεξεργαστείτε τον κανόνα στο `/lib/udev/`:
 
 ```bash
 sudo nano /lib/udev/hwclock-set
@@ -154,34 +154,34 @@ fi
 
 Πατήστε **Ctrl + O** και **Enter** για να αποθηκεύσετε, και **Ctrl + X** για να κλείσετε το nano.
 
-## Remove the fake hardware clock package
+## Απομάκρυνση του πακέτου ψεύτικου ρολογιού (fake hardware clock)
 
-Use the following commands to remove the fake hardware clock package:
+Χρησιμοποιοιήστε την ακόλουθη εντολή για να απομακρύνετε το πακέτο αυτό:
 
 ```bash
 sudo update-rc.d fake-hwclock remove
 sudo apt-get remove fake-hwclock -y
 ```
 
-## Testing the sensors
+## Έλεγχος των αισθητήρων
 
-### Install the necessary software packages
+### Εγκατάσταση των απαραίτητων πακέτων λογισμικού
 
-Power up your Raspberry Pi and log in.
+Ανάψτε το Raspberry Pi και συνδεθείτε.
 
-At the command line, type the following: 
+Από τη γραμμή εντολών πληκτρολογήστε τα ακόλουθα: 
 
 ```bash
 sudo apt-get install i2c-tools python-smbus telnet -y
 ```
 
-Test that the I2C devices are online and working:
+Ελέξτε ότι οι συσκευές I2C devices λειτουργούν:
 
 ```bash
 sudo i2cdetect -y 1
 ```
 
-You should see output similar to this:
+Πρέπει να δείτε κάτι σαν το ακόλουθο:
 
 ```
 	 0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
@@ -195,16 +195,15 @@ You should see output similar to this:
 70: -- -- -- -- -- -- -- 77                         
 ```
 
-- `40` = HTU21D, the humidity and temperature sensor.
-- `77` = BMP180, the barometric pressure sensor.
-- `68` = PCF8523, the real-time clock. It will show as `UU` because it's reserved by the driver.
-- `69` = MCP3427, the analogue-to-digital converter on the main board.
-- `6a` = MCP3427, the analogue-to-digital converter on the snap-off AIR board.
+- `40` = HTU21D, ο αισθητήρας υγρασίας και θερμοκρασίας.
+- `77` = BMP180, ο αισθητήρας βαρομετρικής πίεσης.
+- `68` = PCF8523, το ρολόι πραγματικού χρόνου. Θα εμφανιστεί ως `UU` γιατί είναι δεσμευμένο από τον οδηγό.
+- `69` = MCP3427, ο μετατροπέας αναλογικού σήματος σε ψηφιακό στη μητρική.
+- `6a` = MCP3427, ο μετατροπέας ψηφιακού σήματος σε αναλογικού στη μητρική.
 
-Note: `40`, `77` and `6a` will only show if you have connected the **AIR** board to the main board.
+Παρατήρηση: Τα `40`, `77` και `6a` θα εμφανιστούν μόνο αν έχετε συνδέσει την πλακέτα **ΑΕΡΑ** με τη μητρική πλακέτα.
 
-Now that the sensors are working, we need a database to store the data from them.
-
+Τώρα που δουλεύουν οι αισθητήρες, χρειαζόμαστε μια βάση δεδομένων για να αποθηκεύσουμε τα δεδομένα που πέρνουμε από αυτούς.
 ## Ρύθμιση Βάσης Δεδομένων
 
 Θα ρυθμίσετε τώρα το σταθμό να αποθηκεύει αυτόματα τα δεδομένα που συνέλλεξε. Τα δεδομένα αποθηκεύονται στην κάρτα SD του Raspberry Pi σε μια βάση δεδομένων που λέγετε MySQL. Μόλις ο σταθμός αποθηκεύσει τα δεδομένα τοπικά, θα μπορείτε επίσης να τα [μεταφορτώσετε](oracle.md) σε μια κεντρική βάση δεδομένωn της Oracle Apex για να τα μοιράζεστε και με άλλους. 
@@ -248,16 +247,16 @@ USE weather;
 
 Πρέπει να δείτε `Database changed`.
 
-Αν η MySQL δεν κάνει αυτό που πρέπει ή εμφανίζει λάθη, το πιθανότερο είναι να έχετε ξεχάσει το τελικόy `;`. Απλά πληκτρολογήστε το και πατήστε **Enter**.
+Αν η MySQL δεν κάνει αυτό που πρέπει ή εμφανίζει λάθη, το πιθανότερο είναι να έχετε ξεχάσει το τελικό `;`. Απλά πληκτρολογήστε το και πατήστε **Enter**.
   
 ### Δημιουργία πίνακα στη βάση
 
 Ο πρωτότυπος οδηγός προτείνει να πληκτρολογήσετε τον παρακάτω κώδικα, δίνοντας και τις ακόλουθες συμβουλές: 
 
-- Don't forget the commas at the end of the row.
-- Use the cursor UP arrow to copy and edit a previous line, as many are similar.
-- Type the code carefully and **exactly** as written, otherwise things will break later.
-- Use CAPS LOCK!
+- Μην ξεχάσετε τα κόμματα στο τέλος των γραμμών.
+- Χρησιμοποιήστε το πάνω βελάκι στο πληκτρολόγιο για να αντιγράψετε και να επεξεργαστείτε μια από τις προηγούμενες γραμμές καθώς είναι παρόμοιες.
+- Πληκτρολογήστε τον κώδικα προσεκτικά και **ακριβώς** όπως τον βλέπετε, αλλιώς υπάρχει περίπτωση να υπάρχει πρόβλημα αργότερα.
+- Χρησιμοπιήστε CAPS LOCK!
   
 ```
   CREATE TABLE WEATHER_MEASUREMENT(
@@ -287,9 +286,9 @@ USE weather;
 nano myscript.sql
 ```
 Στο παράθυρο που θα εμφανιστεί Πατήστε δεξί κλικ και paste. Πρέπει να δείτε κάτι σαν την παρακάτω εικόνα:
-![](images/Terminal_063.png) 
+![Παράθυρο τερματικού](images/Terminal_063.png?raw=true)  
 
-Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από nano.
+Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από το nano.
 
 Γράψτε:
 ```
@@ -348,47 +347,47 @@ OK
 
 Με την εντολή `BYE` αποσυνδέεστε.
 ![](images/telnet.png)
-Αν ο υπολογιστής σας δεν έχει εγκατεστημένο εφαρμογή telnet, όπως συνήθως συμβαίνει στα windows, Μπορείτε να χρησιμοποιήσετε το [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html?).
+Αν ο υπολογιστής σας δεν έχει εγκατεστημένο εφαρμογή telnet, όπως συνήθως συμβαίνει στα windows,μπορείτε να χρησιμοποιήσετε το [putty](http://www.chiark.greenend.org.uk/~sgtatham/putty/latest.html?).
 Είναι ένα ελεύθερο λογισμικό που ενσωματώνει πελάτη telnet και, ίσως ακόμα πιο σημαντικό, πελάτη ssh. Με το putty μπορείτε να συνδεθείτε στο 
 raspberrypi απομακρυσμένα μέσω ssh και μετά με telnet, όπως περιγράφεται παραπάνω.
 
-### Set the weather station daemon to automatically start at boot
+### Αυτόματη εκκίνηση του δαίμονα κατά την εκκίνηση του υπολογιστή
 
-Use the following command to automate the daemon:
+Χρησιμοποιήστε την ακόλουθη εντολή για να αυτοματοποιήσετε το δαίμονα:
 
 ```bash
 sudo nano /etc/rc.local
 ```
   
-Insert the following lines before `exit 0` at the bottom of the file:
+Εισάγετε τις ακόλουθες γραμμές πριν από το `exit 0` στο τέλος του αρχείου:
 
 ```bash
-echo "Starting Weather Station daemon..."
+echo "Ο δαίμονας του μετεωρολογικού σταθμού ξεκινά..."
     
 /home/pi/weather-station/interrupt_daemon.py start
 ```
 
-Press `Ctrl - O` then `Enter` to save, and `Ctrl - X` to quit nano.
+Πατήστε `Ctrl - O` και μετά `Enter` για να αποθηκεύσετε και `Ctrl - X` για να βγείτε από το nano.
     
-### Update the MySQL credentials file
+### Ενημέρωση αρχείου ρυθμίσεων MySQL
 
-You'll need to use the password for the MySQL root user that you chose during installation. If you are **not** in the `weather-station` folder, type:
+Θα χρειαστεί να χρησιμοποιήσετε τον κωδικό του χρήστη root της MySQL που επιλέξατε κατά την εγκατάσταση. Αν **δεν** είστε στο φάκελο `weather-station`, γράψτε:
 
 ```bash
 cd ~/weather-station
 ```
 
-then: 
+και μετά: 
 
 ```bash
 nano credentials.mysql
 ```
   
-Change the password field to the password you chose during installation of MySQL. The double quotes `"` enclosing the values are important, so take care not to remove them by mistake.
+Αλλάξτε το πεδίο password και βάλτε τον κωδικό που διαλέξατε κατά την εγκατάσταση της MySQL. Προσέξτε να μην διαγράψετε κατά λάθος τα διπλά εισαγωγικά `"` στις τιμές.
   
-Press **Ctrl + O** then **Enter** to save, and **Ctrl + X** to quit nano.
+Πατήστε `Ctrl - O` και μετά `Enter` για να αποθηκεύσετε και `Ctrl - X` για να βγείτε από το nano.
 
-## Automate updating of the database
+## Αυτόματη ενημέρωση της βάσης δεδομένων
 
 The main entry points for the code are `log_all_sensors.py` and `upload_to_oracle.py`. These will be called by a scheduling tool called [cron](http://en.wikipedia.org/wiki/Cron) to take measurements automatically. The measurements will be saved in the local MySQL database, and they will also be uploaded to the Oracle Apex database online [if you registered](oracle.md).
 
@@ -460,7 +459,7 @@ Press **Ctrl + D** or type `exit` to quit MySQL.
 At this stage, you have a weather station which reads its sensors and stores the data at regular intervals in a database on the SD card. But what if the SD card gets corrupted? How do you backup your data? And how do you share it with the rest of the world?
 
 Oracle has set up a central database to allow all schools in the Weather Station project to upload their data. It is safe there and you can download it in various formats, share it, and even create graphs and reports. Here's how to do it.
-
+Automate updating of the database
 ### Register your school
 
 You'll need to [register your school](oracle.md) and add your weather station. Come back here when you have your weather station passcode.
