@@ -286,7 +286,7 @@ USE weather;
 nano myscript.sql
 ```
 Στο παράθυρο που θα εμφανιστεί Πατήστε δεξί κλικ και paste. Πρέπει να δείτε κάτι σαν την παρακάτω εικόνα:
-![Παράθυρο τερματικού](images/Terminal_063.png?raw=true)  
+![Παράθυρο τερματικού](/images/Terminal_063.png?raw=true)  
 
 Πατήστε **Ctrl + O** μετά **Enter** για να αποθηκεύσετε το αρχείο, και **Ctrl + X** για να βγείτε από το nano.
 
@@ -389,84 +389,83 @@ nano credentials.mysql
 
 ## Αυτόματη ενημέρωση της βάσης δεδομένων
 
-The main entry points for the code are `log_all_sensors.py` and `upload_to_oracle.py`. These will be called by a scheduling tool called [cron](http://en.wikipedia.org/wiki/Cron) to take measurements automatically. The measurements will be saved in the local MySQL database, and they will also be uploaded to the Oracle Apex database online [if you registered](oracle.md).
+Τα προγράματα που χρειάζονται είναι τα `log_all_sensors.py` και `upload_to_oracle.py`. Αυτά καλούνται αυτόματα από ένα εργαλείο χρονοπρογραμματισμού εργασιών που ονομάζεται [cron](http://www.it.uom.gr/teaching/linux/intro-linux-gr/intro-linux.html#sect_04_04_04) και παίρνουν μετρήσεις αυτόματα. Οι μετρήσεις αποθηκεύονται στην τοπική βάση δεδομένων MySQL και στη βάση δεδομένων Oracle Apex στο διαδίκτυο [αν εγραφείτε](oracle.md).
 
-You should enable cron to start taking measurements automatically. This is also known as **data logging mode**: 
+Για να μπορέσετε να πέρνετε μετρήσεις αυτόματα πρέπει να ενεργοποιήσετε το cron. Αυτή η κατάσταση είναι γνωστή ώς **κατάσταση καταγραφής δεδομένων**: 
 
 ```bash
-crontab < crontab.save
+crontab < ~/weather-station/crontab.save
 ```
 
-Your weather station is now live and recording data at timed intervals.
+Ο σταθμός σας τώρα είναι ενεργός και καταγράφει δεδομένα σε τακτικά χρονικά διαστήματα.
   
-You can disable data logging mode at any time by removing the crontab with the command below:
+Μπορείτε να απενεργοποιήσετε την κατάσταση καταγραφής δεδομένων όποτε θέλετε με την ακόλουθη εντολή:
   
 ```bash
 crontab -r
 ```
   
-To enable data logging mode again, use the command below:
+Για να ενεργοποιήσετε την κατάσταση καταγραφής δεδομένων ξανά, χρησιμοποιήστε την εντολή:
   
 ```bash
 crontab < ~/weather-station/crontab.save
 ```
   
-Please note that you should not have data logging mode enabled while you're working through the lessons in the [scheme of work](https://github.com/raspberrypilearning/weather-station-sow).
+Σημείωση: Αν δουλεύετε πάνω στα [μαθήματα](https://github.com/raspberrypilearning/weather-station-sow) δε θα πρέπει να έχετε ενεργοποιημένη την κατάσταση καταγραφής δεδομένων.
   
-### Manually trigger a measurement
+### Χειροκίνηση μέτρηση
 
-You can manually cause a measurement to be taken at any time with the following command:
+Μπορείτε να πάρετε μια μέτρηση όποτε θέλετε με την ακόλουθη εντολή:
 
 ```bash
 sudo ~/weather-station/log_all_sensors.py
 ```
   
-Don't worry if you see `Warning: Data truncated for column X at row 1`: this is expected.
+Μην ανησυχήσετε αν δείτε το μήνυμα `Warning: Data truncated for column X at row 1`: είναι κάτι αναμενόμενο.
 
   
-### View the data in the database 
+### Προβολή των δεδομένων της βάσης 
 
-Enter the following command:
+Δώστε την ακόλουθη εντολή:
 
 ```bash
 mysql -u root -p
 ```
   
-Enter the password (the default for the disk image installation is `tiger`). Then switch to the `weather` database:
+Πληκτρολογήστε τον κωδικό του διαχειριστή της MySql. Αλλάξτε στη βάση δεδομένων `weather`:
   
 ```bash
 USE weather;
 ```
   
-Run a select query to return the contents of the `WEATHER_MEASUREMENT` table:
+Εκτελέστε ένα ερώτημα επιλογής για να δείτε τα περιεχόμενα του πίνακα `WEATHER_MEASUREMENT`:
 
 ```bash
 SELECT * FROM WEATHER_MEASUREMENT;
 ```
 
-![](images/database.png)
+![](archive/images/database.png)
   
-After a lot of measurements have been recorded, it will be sensible to use the SQL `where` clause to only select records that were created after a specific date and time:
+Αφού καταγραφούν πολλές μετρήσεις, θα είναι λογικό να επιλέγετε μόνο τις εγγραφές που δημιουργήθηκαν μετά από κάποια ημερομηνία. Για παράδειγμα η παρακάτω εντολή εμφανίζει τις εγγραφές που δημιουργήθηκαν μετά την 01/04/2017:
   
 ```bash
-SELECT * FROM WEATHER_MEASUREMENT WHERE CREATED > '2014-01-01 12:00:00';
+SELECT * FROM WEATHER_MEASUREMENT WHERE CREATED > '2017-04-01 12:00:00';
 ```
-  
-Press **Ctrl + D** or type `exit` to quit MySQL.
+Πατήστε **Ctrl + D** ή γράψτε `exit` και πατήστε το `enter` για να αποσυνδεθείτε από τη MySQL.
 
-## Upload your data to the Oracle Apex database
+## Ανέβασμα δεδομένων στη βάση δεδομένων Oracle Apex
 
-At this stage, you have a weather station which reads its sensors and stores the data at regular intervals in a database on the SD card. But what if the SD card gets corrupted? How do you backup your data? And how do you share it with the rest of the world?
+Στη φάση αυτή, έχετε ένα μετεωρολογικό σταθμό που διαβάζει τους αισθητήρες του και αποθηκεύει τα δεδομένα σε τακτικά χρονικά διαστήματα σε μια βάση δεδομένων στην κάρτα SD. Αλλά τι θα γίνει αν η κάρτα χαλάσει; Πως θα κρατήσετε αντίγραφα των δεδομένων σας; Και πως θα τα μοιραστείτε με τον υπόλοιπο κόσμο;
 
-Oracle has set up a central database to allow all schools in the Weather Station project to upload their data. It is safe there and you can download it in various formats, share it, and even create graphs and reports. Here's how to do it.
+Η εταιρία Oracle έχει δημιουργήσει μια κεντρική βάση δεδομένων που επιτρέπει σε όλα τα σχολεία που συμμετέχουν στο έργο του Μετεωρολογικού Σταθμού να ανεβάζουν τα δεδομένα τους. Στη βάση αυτή τα δεδομένα είναι ασφαλή και μπορείτε να τα κατεβάσετε σε διάφορες μορφές, να τα μοιραστείτε, ακόμα και να δημιουργήσετε γραφήματα και αναφορές. Ας δούμε πως γίνεται αυτό.
 Automate updating of the database
-### Register your school
+### Εγγραφή του σχολείου σας
 
-You'll need to [register your school](oracle.md) and add your weather station. Come back here when you have your weather station passcode.
+Θα πρέπει να [εγγράψετε το σχολείο σας](oracle.md) και να προσθέσετε το μετεωρολογικό σας σταθμό. Επιστρέψτε εδώ όταν έχετε τον κωδικό του σταθμού σας.
 
-### Update credential files with your weather station details
+### Ενημέρωση αρχείου διαπιστευτηρίων με τις λεπτομέριες του σταθμού σας
 
-Add the weather station name and password to the local Oracle credentials file with the commands below. This allows the code that uploads to Oracle to add it to the correct weather station.
+Με τις ακόλουθες εντολές μπορείτε να προσθέσετε το όνομα και τον κωδικό του σταθμού σας στο τοπικό αρχείο διαπιστευτηρίων της Oracle. Το πρόγραμμα που ανεβάζει τα δεδομένα του σταθμούας στην Oracle θα τα προσθέτει στο σωστό μετεωρολογικό σταθμό.
 
 ```bash
 cd ~/weather-station
@@ -474,33 +473,33 @@ cd ~/weather-station
 nano credentials.oracle.template
 ```
   
-Replace the `name` and `key` parameters with the `Weather Station Name` and `Passcode` of the weather station above. The double quotes `"` enclosing these values in this file are important, so take care not to remove them by mistake. The weather station name must match exactly and is case-sensitive.
+Αντικαταστήστε τα πεδία `name` and `key` με τις τιμές των πεδίων `Weather Station Name` και `Passcode` του μετεωρολογικού σας σταθμού. Τα διπλά εισαγωγικά `"` που περικλείουν τις τιμές είναι σημαντικά. Προσέξτε λοιπόν να μην τα διαγράψετε κατά λάθος. Το όνομα του σταθμού πρέπει να είναι ακριβώς το ίδιο και ισχύει η διάκριση πεζών - κεφαλαίων.
   
-Press `Ctrl - O` then `Enter` to save, and `Ctrl - X` to quit nano.
+Πατήστε `Ctrl - O` και μετά `Enter` για να αποθηκεύσετε και `Ctrl - X` για να βγείτε από το nano.
   
-Rename the Oracle credentials template file to enable it:
+Αλλάξτε το όνομα του αρχείου για να το ενεργοποιήσετε:
 
 ```bash
 mv credentials.oracle.template credentials.oracle
 ```
   
-### Checking that data is received
+### Έλεγχος αποστολής δεδομένων
 
-Manually trigger an upload with the following command:
+Κάντε χειροκίνητα μια αποστολή δεδομένων με την ακόλουθη εντολή:
 
 ```bash
 sudo ~/weather-station/upload_to_oracle.py
 ```
 
-Log into your school's [Oracle Apex account](oracle.md) and go to 'Weather Measurements'. You should see the station readings:
+Συνδεθείτε στο [λογαριασμό σας στο Oracle Apex ](oracle.md) και πηγαίνετε στο 'Weather Measurements'. Πρέπει να δείτε τις μετρήσεις του σταθμού σας:
 
-![](images/weather-readings.png)
+![](archive/images/weather-readings.png)
 
 
-You can download your data in various formats and also make charts using the menu:
+Μπορείτε να κατεβάσετε τα δεδομένά σας σε διάφορες μορφές και επίσης να φτιάξετε διαγράμματα χρησιμοποιόντας το μενού:
 
-![](images/wsmenu.png)
+![](/archive/images/wsmenu.png)
 
-## Next steps
+## Επόμενα βήματα
 
-- You can now proceed to setting up the rest of the hardware in the [Hardware Setup Section](build2.md)
+- Μπορείτε τώρα να συνεχίσετε με τη ρύθμιση του υπόλοιπου υλικού στο [τμήμα ρύθμισης υλικού](build2.md)
