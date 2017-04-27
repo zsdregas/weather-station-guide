@@ -1,58 +1,58 @@
-# Testing your Weather Station
+# Δοκιμάζοντας τον Μετεωρολογικό Σταθμού
 
-With all your sensors connected, it's a good idea to confirm that your weather station is recording data and that it is able to upload it to the Oracle database.
+Με όλους τους αισθητήρες συνδεδεμένους, είναι καλό να βεβαιωθείτε ότι ο μετεωρολογικός σταθμός σας καταγράφει δεδομένα και ότι μπορεί να το ανεβάσει στη βάση Oracle.
 
-## Manipulate and measure the sensors
-1. The anemometer and rain gauge can be manipulated as neither will be recording data unless they are physically moved. Spinning the anemometer and tilting the rain gauge back and forth a few times while the next set of instructions are followed will result in some data being logged. 
+## Χειρίζοντας τους αισθητήρες
+1. Το ανεμόμετρο και το βροχόμετρο μπορούμε να χειριστούμε με το χέρι καθώς κανένα απο τα δύο δεν καταγράφει δεδομένα εκτός αν κινηθούν φυσικά. Στρίβοντας το ανεμόμετρο και γέρνοντας το βροχόμετρο μπρός και πίσω μερικές φορές καθώς ακολουθείτε τα παρακάτω βήματα θα έχει ως αποτέλεσμα να καταγραφούν δεδομένα. 
 
-1. Open up a terminal window (**ctrl** + **alt** + **t**) and then change into the `weather-station` directory:
+1. Ανοίξτε ένα τερματικό παράθυρο (**ctrl** + **alt** + **t**) και πηγαίνουμε στο φάκελο `weather-station`:
 
   ```bash
   cd weather-station
   ```
 
-1. To start logging sensor data, type the following into the terminal window:
+1. Για να αρχίσουμε την καταγραφή των δεδομένων, πληκτολογούμε την ακόλουθη εντολή στο τερματικό:
 
   ```bash
   ./log_all_sensors.py
   ```
 
-1. You should see output as shown in the screen capture below.
+1. Θα δείτε την έξοδο όπως την δείχνουμε παρακάτω.
 
   ![](images/test_01.png)
 
-1. Do not worry about the `Data truncated` warnings. The sensors measure to an unrealistic number of significant figures, so these values are truncated before they are added to the database.
+1. Μην ανησυχήσετε με τα μηνύματα `Data truncated`. Οι αισθητήρες μετρούνται σε ένα απίστευτο αριθμό σημαντικών ψηφίων, οπότε αυτές οι αξίες περικόπτονται πριν προσθεθούν στη βάση δεδομένων.
 
-## Upload to Oracle
+## Ανέβασμα στην Oracle
 
-1. The next step is to test that the software is capable of uploading the data to the online Oracle Database. To test this, type the following into the terminal:
+1. Το επόμενο βήμα είναι να ελεγχθεί ότι το λογισμικό είναι ικανό να ανεβάσει δεδομένα στην online βάση δεδομένων της Oracle. Για να το ελέγξετε αυτό, πληκτρολογήστε τα παρακάτω μέσα στο τερματικό:
 
   ```bash
   sudo ./upload_to_oracle.py
   ```
 
-1. You should see output as shown the screen capture below.
+1. Θα δείτε την έξοδο όπως την δείχνουμε παρακάτω.
 
   ![](images/test_02.png)
 
-1. Each `Response status: 201` message means that a row of the local database on your Raspberry Pi was uploaded to the Oracle database. If you receive a different response code, then check that your Raspberry Pi is connected to the network and that it is capable of communicating through any firewalls or proxy servers your network may be using.
+1. Κάθε απόκριση `Response status: 201` μήνυμα σημαίνει ότι μια γραμμή τοπικής βάσης δεδομένων του Raspberry Pi έχει ανεβεί στη βάση δεδομένων της Oracle. Αν λάβετε ένα διαφορετικό κωδικό απόκρισης, τότε ελέξτε αν το Raspberry Pi είναι συνδεδεμένο στο δίκτυο και ότι είναι ικανό να επικοινωνήσει μέσα από τοίχη προστασίας ή διακομιστές μεσολάβησης που μπορεί να χρησημοποιεί το δίκτυο σας.
 
-## Checking the online database
+## Ελέχοντας την online βάση δεδομένων
 
-1. In your web browser, navigate to the [Oracle Database](https://apex.oracle.com/pls/apex/f?p=81290:LOGIN_DESKTOP:0:::::&tz=1:00) and log in:
+1. Στο φυλλομετρητή σας, εξερευνήστε στην [Βάση Δεδομένων της Oracle](https://apex.oracle.com/pls/apex/f?p=81290:LOGIN_DESKTOP:0:::::&tz=1:00) και συνδεθείτε:
 
   ![](images/test_03.png)
 
-1. On your dashboard, click on Weather Measurement to view the latest measurements from your Weather Station.
+1. Στο ταμπλό σας, κάντε κλικ στο Weather Measurement για να δείτε την πιο πρόσφατη μέτρηση απο το μετεωρολογικό σταθμό σας.
 
   ![](images/test_04.png)
 
-1. It is worth having a play around with the filters and the download options with your data, to see what can be achieved.
+1. Είναι καλό να 'παίξετε' με τα φίλτρα και της επιλογές λήψης με τα δεδομένα, για να δείτε τη μπορεί να επιτευχθεί.
 
-## What Next?
+## Επόμενο;
 
-Now that you have tested your Weather Station, close up the boxes with the long screws and ensure the grommets are in place. 
+Τώρα που έχετε δοκιμάσει το μετεωρολογικό σας σταθμό, κλείστε τα κουτιά με τις μακριές βίδες και βεβαιωθείτε ότι τα πλαστικά είναι στην θέση τους. 
 
   ![](images/close_up_station.png)
 
-You can then proceed to the next section, and learn how to [install the Weather Station at your school](siting.md).
+Μετά μπορείτε να προχωρήσετε στο επόμενο κεφάλαιο, και μάθετε πως να [εγκαταστήσετε τον Μετεωρολογικό Σταθμό στο σχολείο σας](siting.md).
